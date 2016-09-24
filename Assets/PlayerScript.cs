@@ -11,7 +11,7 @@ public class PlayerScript : MonoBehaviour {
 	// Neccesary for jumping.
 	Vector2 velocity;
 	public float speed = 10.0f;
-	public Vector2 jumpSpeed = new Vector2 (0.0f, 19.81f);
+	public float jumpSpeed = 7.5f;
 	public Vector2 gravity = new Vector2(0.0f,-9.81f);
 
 	// Use this for initialization
@@ -26,7 +26,7 @@ public class PlayerScript : MonoBehaviour {
 		{
 			if (Input.GetButtonDown("Jump"))
 			{
-				gravity += jumpSpeed;
+				velocity.y = jumpSpeed;
 			}
 		}
 	}
@@ -35,11 +35,9 @@ public class PlayerScript : MonoBehaviour {
 		if (!isGrounded)
 		{
 			velocity += gravity * Time.deltaTime;
-			if (gravity.y > -9.81f) {
-				//gravity -= gravity * Time.deltaTime;
-			}
 		}
-		playerBody.MovePosition (playerBody.position + velocity * Time.deltaTime);
+		Debug.Log (velocity);
+		playerBody.velocity = velocity;
 	}
 
 	void OnCollisionEnter2D(Collision2D theCollision){
