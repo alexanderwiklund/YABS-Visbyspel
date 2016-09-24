@@ -2,7 +2,11 @@
 using System.Collections;
 
 public class PlayerScript : MonoBehaviour {
-	Rigidbody2D playerBody = null;
+
+	private Rigidbody2D player = null;
+	public AudioSource beerSound = null;
+
+	public int score = 0;
 
 	// Used to keep track of if the player is standing on the ground.
 	GameObject groundedOn = null;
@@ -16,7 +20,9 @@ public class PlayerScript : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		playerBody = this.GetComponent<Rigidbody2D>();
+
+		player = this.GetComponent<Rigidbody2D> ();
+		beerSound = this.GetComponent<AudioSource> ();
 	}
 	
 	// Update is called once per frame
@@ -37,10 +43,20 @@ public class PlayerScript : MonoBehaviour {
 			velocity += gravity * Time.deltaTime;
 		}
 		Debug.Log (velocity);
-		playerBody.velocity = velocity;
+		player.velocity = velocity;
 	}
 
 	void OnCollisionEnter2D(Collision2D theCollision){
+
+		// if colliding with beer 
+		// remove and add score
+		if (theCollision.collider.CompareTag ("Beer")) {
+			score++;
+			beerSound.Play ();
+			Destroy(theCollision.gameObject);
+			Debug.Log ("Beer");
+		}
+
 		foreach(ContactPoint2D contact in theCollision.contacts)
 		{
 			if(contact.normal.y > 0.1)
@@ -59,4 +75,5 @@ public class PlayerScript : MonoBehaviour {
 			isGrounded = false;
 		}
 	}
+
 }
